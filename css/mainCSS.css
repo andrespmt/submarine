@@ -1,0 +1,57 @@
+/* the rteset selector */
+* {
+    margin: 5px;
+}
+
+body {
+    background-color: powderblue;
+}
+  
+h1 {
+    color: blue;
+    margin-top: 20px;
+}
+
+p {
+    color: black; 
+}
+
+p.instructions {
+    color: black;
+    font-weight: bold;
+    margin: 5px; 
+    margin-top: 20px;
+}
+
+table {
+    width: auto;
+}
+
+/* avoid an extra margin in the links */
+a {
+    margin: 0px;
+}
+
+/* Alert bpx */
+.alert {
+    color: red;
+    background-color: lightpink;
+    border: 2px solid red;
+    font-weight: bold;
+    border-radius: 10px 10px 10px 10px;
+    text-align: center;
+    width: 500px;
+    padding: 10px;
+    margin: 5px; 
+}
+
+/* Code snippet box */
+.code {
+    color: black;
+    background-color: white;
+    border: 2px solid black;
+    width: 500px;
+    padding: 10px;
+    margin: 5px; 
+    font-style: italic;
+}

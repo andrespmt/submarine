@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <title>submarine study </title>
+    <meta charset="utf-8" />
+    <meta name="description" content="submarine controls">
+    <meta name="keywords" content="UCLA, submarine">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/mainCSS.css">
+    <script type = "text/javascript" src="scripts/code.js"></script>
+  </head>
+ 
+  <body>
+
+    <!-- these are system requirements -->
+    <h1>Static parameters</h1>
+    <p class="instructions">These settings are the system definition, once the submarine is built they will be static.</p>
+    
+    <p>
+      <table>
+        <tr>
+          <td>Tank Volume</td>
+          <td><input type="number" id="Tank_volume" value="36" >in<sup>3</sup></td>
+        </tr>
+        <tr>
+          <td>Tank max pressure</th>
+          <td><input type="number" id="Tank_max_pressure" value="3000" >PSI</td>
+        </tr>
+        <tr>
+          <td>Tank min pressure</th>
+          <td><input type="number" id="Tank_min_pressure" value="60" >PSI</td>
+        </tr>
+        <tr>   
+          <td>Pneumatic cable volume</th>
+          <td><input type="number" id="System_pneumatic_volume" value="2" >in<sup>3</sup></td>
+        </tr>
+        <tr>
+          <td>Actuators air loss</th>
+          <td><input type="number" id="Actuators_air_loss" value="1" >in<sup>3</sup></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <button id="btn_def" onclick="defaults()">Default</button>
+            <button id="btn_apply" onclick="start()">Start</button>
+         </td>
+        </tr>
+      </table>
+    </p>
+    
+    <!-- Entry parameters that may change during the exercise -->
+    <h1>Live parameters</h1>
+    <p class="instructions"> These settings are variable and they may change while in operation.</p>
+
+    <p>
+      <table>
+        <tr>
+          <td>
+            Temperature
+          </td>
+          <td>          
+            <input type="range" id="temperature_input" list="temperature_scale" min="0" max="50" value="25" oninput="temperature_change()">
+            <output id="temperature_output" for="temperature_input">25</output> C 
+            <datalist id="temperature_scale">
+              <option value="0" label="0"></option>
+              <option value="10" label="10"></option>
+              <option value="20" label="20"></option>
+              <option value="30" label="30"></option>
+              <option value="40" label="40"></option>
+              <option value="50" label="50"></option>
+            </datalist>
+          </td>
+          <td>
+            <button id="temperature_reset" onclick="temperature_reset()">Reset</button> 
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            Depth
+          </td>
+          <td>          
+            <input type="range" id="depth_input" list="depth_scale" min="0" max="10" value="3" oninput="depth_change()">
+            <output id="depth_output" for="depth_input">3</output> m 
+            <datalist id="depth_scale">
+              <option value="0" label="0"></option>
+              <option value="2" label="2"></option>
+              <option value="4" label="4"></option>
+              <option value="6" label="6"></option>
+              <option value="8" label="8"></option>
+              <option value="10" label="10"></option>
+            </datalist>
+          </td>
+          <td>
+            <button id="depth_reset" onclick="depth_reset()">Reset</button>
+          </td>
+        </tr>
+      </table>
+    </p>
+        
+    <h1>Live status</h1>
+    <p class="instructions"> System (submarine) status at any moment.</p>
+
+    <p>
+      <table>
+        <tr>
+          <td>Remaining compressed air</th>
+          <td><output type="text" id="remaining_air" placeholder="Enter value">--</output></td>
+          <td>in<sup>3</sup></td>
+        </tr>
+        <tr>   
+          <td>System pressure</td>
+          <td><output type="text" id="system_pressure" placeholder="Enter value">--</output></td>
+          <td>PSI</td>
+        </tr>
+        <tr>
+          <td>Remaining movements</td>
+          <td><output type="text" id="remaining_mov" placeholder="Enter value">--</output></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Total movements done</td>
+          <td><output type="text" id="total_mov" placeholder="Enter value">--</output></td>
+          <td></td>
+        </tr>
+        <tr><td>-------------</td></tr>
+        <tr>
+          <td>Torpedo launches</td>
+          <td><output type="text" id="torpedo_count"> 0 </output></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Arm movements</td>
+          <td><output type="text" id="arm_count"> 0 </output></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Claw moves</td>
+          <td><output type="text" id="claw_count"> 0 </output></td>
+          <td></td>
+        </tr>
+      </table>
+    </p>
+
+    <h1>Operation</h1>
+    <p class="instructions"> These are the robot actions.</p>
+    <p>
+      <button id="btn_torpedo" onclick="launch_torpedo()">Launch torpedo</button>
+      <button id="btn_arm" onclick="move_arm()">Move arm</button>
+      <button id="btn_claw" onclick="move_claw()">Move claw</button>
+    </p>
+
+    <h1> Formulas </h1>
+    <pre class="code">
+      PV=nRT
+      R=0.08206 ( l atm / mol K)
+    </pre>
+    
+    <address>UCLA<BR>
+      <a href="https://www.ucla.edu/">www.ucla.com</a>
+    </address>
+  
+  </body>
+
+  </html> 
