@@ -14,14 +14,17 @@ function start() {
   convert_to_atm("Tank_min_pressure","Tank_min_pressure_atm");
   convert_to_K("temperature_input","temperature_input_K");
 
+  // set initial colors
+  document.getElementById("remaining_mov").style.color="black";
+  document.getElementById("remaining_pressure").style.color="black";
+  document.getElementById("remaining_air").style.color="black";
+
   // Enable the operations buttons
   controls_disabled(false);
 
   // Run the maths
   Calculate_system_initial_status();
 }
-
-
 
 
 // This functions resets the system parameters to defaults values
@@ -72,6 +75,9 @@ function Calculate_system_initial_status() {
   controls_disabled(false);
 
 }
+
+
+
 // This function executes submarine model
 // parameter number of movements done in between calls
 function calculate_live(mov) {
@@ -79,23 +85,41 @@ function calculate_live(mov) {
   remaining_pressure = parseFloat(document.getElementById("remaining_pressure").value);
   remaining_air = parseFloat(document.getElementById("remaining_air").value);
 
-  tank_volume = parseInt(document.getElementById("Tank_volume").value);
-  system_volume = parseInt(document.getElementById("System_pneumatic_volume").value);
+  tank_volume = parseFloat(document.getElementById("Tank_volume_l").value);
+  system_volume = parseFloat(document.getElementById("System_pneumatic_volume_l").value);
+  min_pressure_atm = parseFloat(document.getElementById("Tank_min_pressure_atm").value);
 
-  
-  actuator_air_loss = 0.1;   // parseInt(document.getElementById("Actuators_air_loss").value);
+  actuator_air_loss_moles = 0.1;   // parseInt(document.getElementById("Actuators_air_loss").value);
   claw_count = parseInt(document.getElementById("claw_count").value);
   arm_count = parseInt(document.getElementById("arm_count").value);
   torpedo_count = parseInt(document.getElementById("torpedo_count").value);
 
-
-
   total_movements = claw_count + arm_count + torpedo_count;
-  remaining_air = remaining_air - actuator_air_loss * mov ;  // moles
-  remaining_movements = remaining_air / actuator_air_loss  ;
+  remaining_air = remaining_air - actuator_air_loss_moles * mov ;  // moles
+
+
+  if (remaining_air < actuator_air_loss_moles) {
+    document.getElementById("remaining_air").style.color="red";
+    controls_disabled(true);
+  }
+
+  remaining_movements = remaining_air / actuator_air_loss_moles  ;
+
+
+  if (remaining_movements < 0) {
+    document.getElementById("remaining_mov").style.color="red";
+    controls_disabled(true);
+  }
+
+
   R = 0.08206;
   temp = parseFloat(document.getElementById("temperature_input_K").value);
   remaining_pressure =  (remaining_air * R * temp ) / (tank_volume + system_volume ) ; 
+
+  if (remaining_pressure < min_pressure_atm ) {
+    document.getElementById("remaining_pressure").style.color="red";
+    controls_disabled(true);
+  }
 
   // Update outputs
   document.getElementById("total_mov").value =  total_movements; 
