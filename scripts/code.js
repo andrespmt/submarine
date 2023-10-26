@@ -18,7 +18,7 @@ function start() {
   controls_disabled(false);
 
   // Run the maths
-  calculate();
+  Calculate_system_initial_status();
 }
 
 
@@ -43,24 +43,65 @@ function set_defaults() {
   controls_disabled(true);
 }
 
+// This function calculates the moles in the system
+// formula =>  n = PV / RT
+function Calculate_system_initial_status() {
+  pressure = parseFloat(document.getElementById("Tank_max_pressure_atm").value);
+  volume_tank = parseFloat(document.getElementById("Tank_volume_l").value);
+  volume_system = parseFloat(document.getElementById("System_pneumatic_volume_l").value);
+  R = 0.08206;
+  temp = parseFloat(document.getElementById("temperature_input_K").value);
+
+  // initial_air_mol
+  moles = ((pressure * (volume_tank + volume_system) ) / (R * temp )).toFixed(4); 
+  document.getElementById("initial_air_mol").value = moles;
+  document.getElementById("remaining_air").value = moles;
+
+  // initial_pressure
+  document.getElementById("initial_pressure").value = pressure;
+  document.getElementById("remaining_pressure").value = pressure;
+
+  // initial_movements
+  actuator_air_loss_moles = 0.1;
+  movements = moles / actuator_air_loss_moles; 
+  document.getElementById("initial_total_mov").value = Math.floor(movements);
+  document.getElementById("total_mov").value =  0; 
+  document.getElementById("remaining_mov").value = Math.floor(movements); 
+
+  // Disable the operations controrls since system has changed
+  controls_disabled(false);
+
+}
 // This function executes submarine model
-function calculate() {
+// parameter number of movements done in between calls
+function calculate_live(mov) {
+
+  remaining_pressure = parseFloat(document.getElementById("remaining_pressure").value);
+  remaining_air = parseFloat(document.getElementById("remaining_air").value);
 
   tank_volume = parseInt(document.getElementById("Tank_volume").value);
   system_volume = parseInt(document.getElementById("System_pneumatic_volume").value);
-  tank_max_pressure = parseInt(document.getElementById("Tank_max_pressure").value);
-  actuator_air_loss = parseInt(document.getElementById("Actuators_air_loss").value);
+
+  
+  actuator_air_loss = 0.1;   // parseInt(document.getElementById("Actuators_air_loss").value);
   claw_count = parseInt(document.getElementById("claw_count").value);
   arm_count = parseInt(document.getElementById("arm_count").value);
   torpedo_count = parseInt(document.getElementById("torpedo_count").value);
 
-  total_movements = claw_count + arm_count + torpedo_count;
-  remaining_air = tank_volume - system_volume - actuator_air_loss * total_movements ; 
-  remaining_movements = remaining_air / actuator_air_loss  ;
 
+
+  total_movements = claw_count + arm_count + torpedo_count;
+  remaining_air = remaining_air - actuator_air_loss * mov ;  // moles
+  remaining_movements = remaining_air / actuator_air_loss  ;
+  R = 0.08206;
+  temp = parseFloat(document.getElementById("temperature_input_K").value);
+  remaining_pressure =  (remaining_air * R * temp ) / (tank_volume + system_volume ) ; 
+
+  // Update outputs
   document.getElementById("total_mov").value =  total_movements; 
   document.getElementById("remaining_mov").value = Math.floor( remaining_movements); 
-  document.getElementById("remaining_air").value = remaining_air;
+  document.getElementById("remaining_air").value = remaining_air.toFixed(4);
+  document.getElementById("remaining_pressure").value = remaining_pressure.toFixed(4);
 }
 
 
@@ -75,12 +116,14 @@ function temperature_reset(id_in, id_out) {
   document.getElementById("temperature_output").value = 25;  
   document.getElementById("temperature_input").value = 25;  
   convert_to_K(id_in, id_out);
+  calculate_live(0);
 }
 
 // This functions updates the Temperature output
 function temperature_change(id_in, id_out) {
   document.getElementById("temperature_output").value = document.getElementById("temperature_input").value;  
   convert_to_K(id_in, id_out);
+  calculate_live(0);
 }
 
 // This functions resets Depth = 3
@@ -109,21 +152,21 @@ function move_claw() {
   tmp = parseInt(document.getElementById("claw_count").value);
   tmp += 1;
   document.getElementById("claw_count").value = tmp; 
-  calculate();
+  calculate_live(1);   // one movement
 }
 
 function move_arm() {
   tmp = parseInt(document.getElementById("arm_count").value);
   tmp += 1;
   document.getElementById("arm_count").value = tmp;
-  calculate(); 
+  calculate_live(1);  // one movement
 }
 
 function launch_torpedo() {
   tmp = parseInt(document.getElementById("torpedo_count").value);
   tmp += 1;
   document.getElementById("torpedo_count").value = tmp; 
-  calculate();
+  calculate_live(1); // one movement
 }
 
 function convert_to_liters (id,id_out) {
