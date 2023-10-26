@@ -61,7 +61,7 @@
         <tr>
           <td></td>
           <td>
-            <button id="btn_def" onclick="defaults()">Default</button>
+            <button id="btn_def" onclick="set_defaults()">Default</button>
             <button id="btn_apply" onclick="start()">Start</button>
          </td>
         </tr>
@@ -169,12 +169,12 @@
     <h1>Operation</h1>
     <p class="instructions"> These are the robot actions.</p>
     <p>
-      <button id="btn_torpedo" onclick="launch_torpedo()">Launch torpedo</button>
-      <button id="btn_arm" onclick="move_arm()">Move arm</button>
-      <button id="btn_claw" onclick="move_claw()">Move claw</button>
+      <button disabled="disabled" id="btn_torpedo" onclick="launch_torpedo()">Launch torpedo</button>
+      <button disabled="disabled" id="btn_arm" onclick="move_arm()">Move arm</button>
+      <button disabled="disabled" id="btn_claw" onclick="move_claw()">Move claw</button>
     </p>
 
-    <h1> Formulas </h1>
+    <h1> Math formulas </h1>
     <pre class="code">
       PV=nRT
       R=0.08206 ( l atm / mol K)
