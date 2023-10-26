@@ -20,42 +20,42 @@
       <table>
         <tr>
           <td>Tank Volume</td>
-          <td><input type="number" id="Tank_volume" value="36" onchange="convert_to_liters('Tank_volume','Tank_volume_l')"></td>
+          <td><input type="number" id="tank_volume" value="36" onchange="convert_to_liters('tank_volume','tank_volume_l')"></td>
           <td>in<sup>3</sup></td>
           <td>==></td>
-          <td><output type="text" id="Tank_volume_l" >--</output></td>
+          <td><output type="text" id="tank_volume_l" >--</output></td>
           <td>liters</td>
         </tr>
         <tr>
           <td>Tank max pressure</th>
-          <td><input type="number" id="Tank_max_pressure" value="3000" onchange="convert_to_atm('Tank_max_pressure','Tank_max_pressure_atm')"></td>
+          <td><input type="number" id="tank_max_pressure" value="3000" onchange="convert_to_atm('tank_max_pressure','tank_max_pressure_atm')"></td>
           <td>PSI</td>
           <td>==></td>
-          <td><output type="text" id="Tank_max_pressure_atm" >--</output></td>
+          <td><output type="text" id="tank_max_pressure_atm" >--</output></td>
           <td>atm</td>
         </tr>
         <tr>
           <td>Tank min pressure</th>
-          <td><input type="number" id="Tank_min_pressure" value="60" onchange="convert_to_atm('Tank_min_pressure','Tank_min_pressure_atm')"></td>
+          <td><input type="number" id="tank_min_pressure" value="60" onchange="convert_to_atm('tank_min_pressure','tank_min_pressure_atm')"></td>
           <td>PSI</td>
           <td>==></td>
-          <td><output type="text" id="Tank_min_pressure_atm" >--</output></td>
+          <td><output type="text" id="tank_min_pressure_atm" >--</output></td>
           <td>atm</td>
         </tr>
         <tr>   
           <td>Pneumatic cable volume</th>
-          <td><input type="number" id="System_pneumatic_volume" value="2" onclick="convert_to_liters('System_pneumatic_volume','System_pneumatic_volume_l')"></td>
+          <td><input type="number" id="system_pneumatic_volume" value="2" onclick="convert_to_liters('system_pneumatic_volume','system_pneumatic_volume_l')"></td>
           <td>in<sup>3</sup></td>
           <td>==></td>
-          <td><output type="text" id="System_pneumatic_volume_l" >--</output></td>
+          <td><output type="text" id="system_pneumatic_volume_l" >--</output></td>
           <td>liters</td>
         </tr>
         <tr>
           <td>Actuators air loss</th>
-          <td><input type="number" id="Actuators_air_loss" value="1" onclick="convert_to_liters('Actuators_air_loss','Actuators_air_loss_l')"></td>
+          <td><input type="number" id="actuators_air_loss" value="1" onclick="convert_to_liters('actuators_air_loss','actuators_air_loss_l')"></td>
           <td>in<sup>3</sup></td>
           <td>==></td>
-          <td><output type="text" id="Actuators_air_loss_l" >--</output></td>
+          <td><output type="text" id="actuators_air_loss_l" >--</output></td>
           <td>liters</td>
         </tr>
         <tr>
@@ -79,7 +79,7 @@
             Temperature
           </td>
           <td>          
-            <input type="range" id="temperature_input" list="temperature_scale" min="0" max="50" value="25" oninput="temperature_change('temperature_input','temperature_input_K')">
+            <input type="range" id="temperature_range_c" list="temperature_scale" min="0" max="50" value="25" oninput="temperature_change()">
             <datalist id="temperature_scale">
               <option value="0" label="0"></option>
               <option value="10" label="10"></option>
@@ -89,12 +89,12 @@
               <option value="50" label="50"></option>
             </datalist>
           </td>
-          <td><output id="temperature_output" for="temperature_input">25</output> C<sup>o</sup></td>
+          <td><output id="temperature_input_c">25</output> C<sup>o</sup></td>
           <td> ==></td>
-          <td><output type="text" id="temperature_input_K" >--</output></td>
+          <td><output type="text" id="temperature_input_k" >--</output></td>
           <td>K</td>
           <td>
-            <button id="temperature_reset" onclick="temperature_reset('temperature_input','temperature_input_K')">Reset</button> 
+            <button id="temperature_reset" onclick="temperature_reset()">Reset</button> 
           </td>
         </tr>
 
@@ -122,19 +122,53 @@
       </table>
     </p>
         
-    <h1>Live status</h1>
-    <p class="instructions"> System (submarine) status at any moment.</p>
-
+    <h1>Submarine information</h1>
+    
     <p>
       <table>
+        <tr><th colspan="3">--- TANK initial conditions ---</th></tr>    
         <tr>
-          <td>Initial compressed air</th>
-          <td><output type="text" id="initial_air_mol" >--</output></td>
-          <td>mol</td>
+          <td>Volume</th>
+          <td><output type="text" id="initial_tank_volume_l" >--</output></td>
+          <td>liters</td>
         </tr>
         <tr>   
           <td>Initial pressure</td>
-          <td><output type="text" id="initial_pressure">--</output></td>
+          <td><output type="text" id="initial_tank_pressure_atm">--</output></td>
+          <td>atm</td>
+        </tr>
+        <tr>   
+          <td>Initial temperature</td>
+          <td><output type="text" id="initial_tank_temperature_k">--</output></td>
+          <td>K</td>
+        </tr>
+        <tr>
+          <td>Initial compressed air</th>
+          <td><output type="text" id="initial_tank_air_mol" >--</output></td>
+          <td>mol</td>
+        </tr>
+      </table>
+    
+      <table>
+        <tr><th colspan="3">--- SYSTEM initial conditions  ---</th></tr>    
+        <tr>
+          <td>System volume (tank + cables)</th>
+          <td><output type="text" id="initial_system_volume_l" >--</output></td>
+          <td>liters</td>
+        </tr>
+        <tr>
+          <td>Initial compressed air</th>
+          <td><output type="text" id="initial_system_air_mol" >--</output></td>
+          <td>mol</td>
+        </tr>
+        <tr>   
+          <td>Initial temperature</td>
+          <td><output type="text" id="initial_system_temperature_k">--</output></td>
+          <td>K</td>
+        </tr>
+        <tr>   
+          <td>System pressure</td>
+          <td><output type="text" id="initial_system_pressure_atm">--</output></td>
           <td>atm</td>
         </tr>
         <tr>
@@ -142,16 +176,18 @@
           <td><output type="text" id="initial_total_mov" >--</output></td>
           <td></td>
         </tr>
-
-        <tr><td>-------------</td></tr>
+      </table>
+    
+      <table>
+        <tr><th colspan="3">--- REMAINING ---</th></tr>
         <tr>
           <td>Remaining compressed air</th>
-          <td><output type="text" id="remaining_air" >--</output></td>
+          <td><output type="text" id="remaining_air_mol" >--</output></td>
           <td>mol</td>
         </tr>
         <tr>   
           <td>Remaining pressure</td>
-          <td><output type="text" id="remaining_pressure">--</output></td>
+          <td><output type="text" id="remaining_pressure_atm">--</output></td>
           <td>atm</td>
         </tr>
         <tr>
@@ -164,7 +200,10 @@
           <td><output type="text" id="total_mov" >--</output></td>
           <td></td>
         </tr>
-        <tr><td>-------------</td></tr>
+      </table>
+      
+      <table>
+        <tr><th colspan="3">--- STATS ---</th></tr>
         <tr>
           <td>Torpedo launches</td>
           <td><output type="text" id="torpedo_count"> 0 </output></td>
