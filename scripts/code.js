@@ -46,36 +46,40 @@ function set_defaults() {
   controls_disabled(true);
 }
 
+
 // This function calculates the moles in the system
 // formula =>  n = PV / RT
 function Calculate_system_initial_status() {
-  pressure = parseFloat(document.getElementById("Tank_max_pressure_atm").value);
+
+  // first: calculate the total number of moles in the tank
+  pressure_tank = parseFloat(document.getElementById("Tank_max_pressure_atm").value);
   volume_tank = parseFloat(document.getElementById("Tank_volume_l").value);
-  volume_system = parseFloat(document.getElementById("System_pneumatic_volume_l").value);
   R = 0.08206;
   temp = parseFloat(document.getElementById("temperature_input_K").value);
+  moles_tank = (pressure_tank * volume_tank ) / (R * temp ); 
+  
+  // second : calculate the pressure in the system once the tank is connected to the cables. Volume changes.
+  pneumatic_volume = parseFloat(document.getElementById("System_pneumatic_volume_l").value);
+  system_pressure = moles_tank * R * temp / (volume_tank + pneumatic_volume);
 
   // initial_air_mol
-  moles = ((pressure * (volume_tank + volume_system) ) / (R * temp )).toFixed(4); 
-  document.getElementById("initial_air_mol").value = moles;
-  document.getElementById("remaining_air").value = moles;
+  document.getElementById("initial_air_mol").value = moles_tank.toFixed(4);
+  document.getElementById("remaining_air").value = moles_tank.toFixed(4);
 
   // initial_pressure
-  document.getElementById("initial_pressure").value = pressure;
-  document.getElementById("remaining_pressure").value = pressure;
+  document.getElementById("initial_pressure").value = system_pressure.toFixed(4);
+  document.getElementById("remaining_pressure").value = system_pressure.toFixed(4);
 
   // initial_movements
   actuator_air_loss_moles = 0.1;
-  movements = moles / actuator_air_loss_moles; 
+  movements = moles_tank / actuator_air_loss_moles; 
   document.getElementById("initial_total_mov").value = Math.floor(movements);
   document.getElementById("total_mov").value =  0; 
   document.getElementById("remaining_mov").value = Math.floor(movements); 
 
   // Disable the operations controrls since system has changed
   controls_disabled(false);
-
 }
-
 
 
 // This function executes submarine model
@@ -95,17 +99,14 @@ function calculate_live(mov) {
   torpedo_count = parseInt(document.getElementById("torpedo_count").value);
 
   total_movements = claw_count + arm_count + torpedo_count;
+
   remaining_air = remaining_air - actuator_air_loss_moles * mov ;  // moles
-
-
   if (remaining_air < actuator_air_loss_moles) {
     document.getElementById("remaining_air").style.color="red";
     controls_disabled(true);
   }
 
   remaining_movements = remaining_air / actuator_air_loss_moles  ;
-
-
   if (remaining_movements < 0) {
     document.getElementById("remaining_mov").style.color="red";
     controls_disabled(true);
@@ -115,7 +116,6 @@ function calculate_live(mov) {
   R = 0.08206;
   temp = parseFloat(document.getElementById("temperature_input_K").value);
   remaining_pressure =  (remaining_air * R * temp ) / (tank_volume + system_volume ) ; 
-
   if (remaining_pressure < min_pressure_atm ) {
     document.getElementById("remaining_pressure").style.color="red";
     controls_disabled(true);
@@ -126,7 +126,9 @@ function calculate_live(mov) {
   document.getElementById("remaining_mov").value = Math.floor( remaining_movements); 
   document.getElementById("remaining_air").value = remaining_air.toFixed(4);
   document.getElementById("remaining_pressure").value = remaining_pressure.toFixed(4);
+
 }
+
 
 
 // This is an alert for when the maths are wrong
