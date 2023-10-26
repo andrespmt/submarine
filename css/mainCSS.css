@@ -5,6 +5,17 @@
 
 body {
     background-color: powderblue;
+    width: 1250px
+}
+
+#sidebarA {
+    width: 600px;
+    float: right;
+}
+
+#main {
+    width: 600px;
+    float: left;
 }
   
 h1 {
