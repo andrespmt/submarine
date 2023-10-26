@@ -1,5 +1,4 @@
 
-
 // This function resets the values to start modeling
 function start() {
   document.getElementById("torpedo_count").value = 0; 
@@ -36,14 +35,16 @@ function bad_data() {
 
 
 // This functions resets Temperature = 25
-function temperature_reset() {
+function temperature_reset(id_in, id_out) {
   document.getElementById("temperature_output").value = 25;  
   document.getElementById("temperature_input").value = 25;  
+  convert_to_K(id_in, id_out);
 }
 
 // This functions updates the Temperature output
-function temperature_change() {
+function temperature_change(id_in, id_out) {
   document.getElementById("temperature_output").value = document.getElementById("temperature_input").value;  
+  convert_to_K(id_in, id_out);
 }
 
 // This functions resets Depth = 3
@@ -85,4 +86,22 @@ function launch_torpedo() {
   tmp += 1;
   document.getElementById("torpedo_count").value = tmp; 
   calculate();
+}
+
+function convert_to_liters (id,id_out) {
+  tmp = parseFloat(document.getElementById(id).value);
+  tmp = tmp * 0.016387064 ;
+  document.getElementById(id_out).value = tmp.toFixed(4); 
+}
+
+function convert_to_atm (id,id_out) {
+  tmp = parseFloat(document.getElementById(id).value);
+  tmp = tmp * 0.0680459639 ;
+  document.getElementById(id_out).value = tmp.toFixed(4); 
+}
+
+function convert_to_K (id,id_out) {
+  tmp = parseFloat(document.getElementById(id).value);
+  tmp = tmp + 273.15 ;
+  document.getElementById(id_out).value = tmp.toFixed(4); 
 }
