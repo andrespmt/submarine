@@ -8,16 +8,7 @@ body {
     width: 1250px
 }
 
-#sidebarA {
-    width: 600px;
-    float: right;
-}
 
-#main {
-    width: 600px;
-    float: left;
-}
-  
 h1 {
     color: blue;
     margin-top: 20px;
@@ -27,16 +18,29 @@ p {
     color: black; 
 }
 
-p.instructions {
-    color: black;
-    font-weight: bold;
-    margin: 5px; 
-    margin-top: 20px;
+.sidebarB {
+    width: 600px;
+    float: left;
 }
+
+.sidebarA {
+    width: 600px;
+    float: right;
+}
+
+
+
 
 table {
     width: auto;
+    margin: 20px; 
 }
+
+
+th {
+    background-color: lightcyan;
+}
+
 
 /* avoid an extra margin in the links */
 a {
@@ -66,10 +70,11 @@ a {
     margin: 5px; 
     font-style: italic;
 }
-table {
-    margin: 20px; 
-}
 
-th {
-    background-color: lightcyan;
+
+p.instructions {
+    color: black;
+    font-weight: bold;
+    margin: 5px; 
+    margin-top: 20px;
 }

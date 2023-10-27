@@ -11,12 +11,11 @@
   </head>
  
   <body>
-
-    <main id="main">
+    <main class="sidebarB">
       <!-- these are system requirements -->
       <h1>System parameters</h1>
       <p class="instructions">These settings are the system definition, once the submarine is built they will be static. <br> After setting the parameters click "start" to begin</p>
-      
+
       <p>
         <table>
           <tr>
@@ -72,7 +71,6 @@
       <!-- Entry parameters that may change during the exercise -->
       <h1>Variable conditions</h1>
       <p class="instructions"> These settings are variable and they may change while in operation.</p>
-
       <p>
         <table>
           <tr>
@@ -98,7 +96,6 @@
               <button id="temperature_reset" onclick="temperature_reset()">Reset</button> 
             </td>
           </tr>
-
           <tr>
             <td>
               Depth
@@ -130,12 +127,12 @@
         <button disabled="disabled" id="btn_arm" onclick="move_arm()">Move arm</button>
         <button disabled="disabled" id="btn_claw" onclick="move_claw()">Move claw</button>
       </p>
-      
     </main>
 
-    <aside id="sidebarA">
+    <main class="sidebarA">
+
       <h1>Submarine information</h1>
-      
+        
       <p>
         <table>
           <tr><th colspan="3">--- TANK initial conditions ---</th></tr>    
@@ -160,7 +157,7 @@
             <td>mol</td>
           </tr>
         </table>
-      
+        
         <table>
           <tr><th colspan="3">--- SYSTEM initial conditions  ---</th></tr>    
           <tr>
@@ -189,7 +186,7 @@
             <td></td>
           </tr>
         </table>
-      
+        
         <table>
           <tr><th colspan="3">--- REMAINING ---</th></tr>
           <tr>
@@ -234,7 +231,7 @@
         </table>
       </p>
 
-<!--      <h1> Math formulas </h1> -->
+      <!--      <h1> Math formulas </h1> -->
       <pre class="code">
         PV=nRT
         R=0.08206 ( l atm / mol K)
@@ -243,13 +240,12 @@
         K = °C + 273.15 
         air_loss_in_mols = 4 atm x 0.0164 l / R x 293 k (default)
         System volume = Tank volume + pneumatic_cables volume
-      </pre>
-    </aside>     
+      </pre>  
+    </main>
 
-    <address>UCLA<BR>
+    <address>
+      Susana Prieto-Moreno<br>
       <a href="https://www.ucla.edu/">www.ucla.com</a>
     </address>
-  
   </body>
-
-  </html> 
+</html> 
