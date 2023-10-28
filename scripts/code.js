@@ -1,4 +1,10 @@
 
+/*
++--------------------------------------------------------------------------+
+|   Main functions                                                         |
++--------------------------------------------------------------------------+
+*/
+
 // This function resets the values to start modeling
 // This function performs the conversions that are needed for the calculations
 function start() {
@@ -28,6 +34,7 @@ function start() {
 
 
 // This functions resets the system parameters to defaults values
+// This function performs the conversions that are needed for the calculations
 function set_defaults() {
   document.getElementById("tank_volume").value = 36 ;
   document.getElementById("tank_max_pressure").value = 3000 ;
@@ -134,7 +141,12 @@ function calculate_live(mov) {
 
 }
 
-// This functions resets Temperature = 25
+
+/*-----------------------------------------------*/
+/*-- Functions for temperature and depth       --*/
+/*-----------------------------------------------*/
+
+// This function resets Temperature = 25
 function temperature_reset() {
   document.getElementById("temperature_input_c").value = 25;  
   document.getElementById("temperature_range_c").value = 25;  
@@ -142,20 +154,20 @@ function temperature_reset() {
   calculate_live(0);
 }
 
-// This functions updates the Temperature output
+// This function updates the Temperature output
 function temperature_change() {
   document.getElementById("temperature_input_c").value = document.getElementById("temperature_range_c").value;  
   convert_to_K("temperature_input_c", "temperature_input_k");
   calculate_live(0);
 }
 
-// This functions resets Depth = 3
+// This function resets Depth = 3
 function depth_reset() {
   document.getElementById("depth_output").value = 3;  
   document.getElementById("depth_input").value = 3;
 }
 
-// This functions updates the Depth output
+// This function updates the Depth output
 function depth_change() {
   document.getElementById("depth_output").value = document.getElementById("depth_input").value;  
 }
