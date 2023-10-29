@@ -1,4 +1,10 @@
-/* the rteset selector */
+/*! mainCSS fro submarine web | MIT License  */
+
+/*-------------------------------*/
+/* Layout of the main components */
+/*-------------------------------*/
+
+/* the reset selector */
 * {
     margin: 0.2%;
 }
@@ -13,7 +19,7 @@ body {
 h1 {
     color: blue;
     margin-top: 2%;
-    font-size: 2em;
+    font-size: 1.5em;
 }
 
 p {
@@ -33,6 +39,15 @@ main {
     margin-left: 5%;
 }
 
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/*-------------------------*/
+/* CSS for HTML components */
+/*-------------------------*/
 table.output {
     width: 75%;
     margin: 2%; 
@@ -54,34 +69,17 @@ a {
     margin: 0%;
 }
 
-.b_big {
-    border: 1px solid black;
-    background-color: lightgrey;
+/* P section for writing section instructions */
+p.instructions {
     color: black;
-    padding: 2% 3%;
-    font-size: 0.9em;
-    width: 27%;
-    border-radius: 8px;
+    font-weight: bold;
+    margin: 2%; 
+    margin-top: 2%;
 }
 
-.b_big:hover {
-    background-color: grey;
-    color: white;
-}
-
-.b_big:disabled {
-    /*your styles*/
-    border: 1px solid grey;
-    color: grey;
-    background-color: powderblue;
-}
-
-
-.clearfix::after {
-    content: "";
-    clear: both;
-    display: table;
-}
+/*-------------------------*/
+/* Other elemeents (class) */
+/*-------------------------*/
 
 /* Alert bpx */
 .alert {
@@ -108,20 +106,46 @@ a {
     font-size: 1.1em;
 }
 
-p.instructions {
+
+/*-------------------------------*/
+/* CSS for the 'control' buttons */
+/*-------------------------------*/
+.b_big {
+    border: 1px solid black;
+    background-color: lightgrey;
     color: black;
-    font-weight: bold;
-    margin: 2%; 
-    margin-top: 2%;
+    padding: 2% 3%;
+    font-size: 0.9em;
+    width: 30%;
+    border-radius: 8px;
 }
 
-/* NAV BAR Layout */
+.b_big:hover {
+    background-color: grey;
+    color: white;
+}
+
+.b_big:disabled {
+    /*your styles*/
+    border: 1px solid grey;
+    color: grey;
+    background-color: powderblue;
+}
+
+html.my-true-hover button:hover {
+    background-color: blue;
+}
+
+
+/*-------------------------------*/
+/* NAV BAR (MENU) Layout         */
+/*-------------------------------*/
 #nav_menu ul {  list-style-type:none ;}
 #nav_menu ul li { margin-top: 0% ; margin-right:5%; float:left ; }
 #nav_menu ul li a { 
     text-align: left;
     border-left: none;
-    font-size: 1.6em;
+    font-size: 1.5em;
    /* padding: 1em 2em 1em 2em;*/
     text-decoration: none;
     color:black;
