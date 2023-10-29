@@ -123,6 +123,7 @@ p.instructions {
 .b_big:hover {
     background-color: grey;
     color: white;
+    cursor: pointer;
 }
 
 .b_big:disabled {
