@@ -1,6 +1,6 @@
 /* the rteset selector */
 * {
-    margin: 1%;
+    margin: 0.2%;
 }
 
 body {
@@ -54,6 +54,29 @@ a {
     margin: 0%;
 }
 
+.b_big {
+    border: 1px solid black;
+    background-color: lightgrey;
+    color: black;
+    padding: 2% 3%;
+    font-size: 0.9em;
+    width: 27%;
+    border-radius: 8px;
+}
+
+.b_big:hover {
+    background-color: grey;
+    color: white;
+}
+
+.b_big:disabled {
+    /*your styles*/
+    border: 1px solid grey;
+    color: grey;
+    background-color: powderblue;
+}
+
+
 .clearfix::after {
     content: "";
     clear: both;
@@ -85,7 +108,6 @@ a {
     font-size: 1.1em;
 }
 
-
 p.instructions {
     color: black;
     font-weight: bold;
@@ -94,23 +116,17 @@ p.instructions {
 }
 
 /* NAV BAR Layout */
-#nav_menu ul { margin: 0%; list-style-type:none ;}
-#nav_menu ul li { float:left ;}
+#nav_menu ul {  list-style-type:none ;}
+#nav_menu ul li { margin-top: 0% ; margin-right:5%; float:left ; }
 #nav_menu ul li a { 
     text-align: left;
-    font-size: 1.5em;
+    border-left: none;
+    font-size: 1.6em;
    /* padding: 1em 2em 1em 2em;*/
-    margin: 0%;
     text-decoration: none;
     color:black;
 }
-
 #nav_menu ul li a.current { 
     font-weight: bold;
     text-decoration: underline ;
 }
-
-
-
-
-
