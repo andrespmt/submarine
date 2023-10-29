@@ -1,39 +1,46 @@
 /* the rteset selector */
 * {
-    margin: 5px;
+    margin: 1%;
 }
 
 body {
     background-color: powderblue;
-    width: 1250px
+    max-width: 1000px;
+    min-width: 800px;
+    width: 100%;
 }
-
 
 h1 {
     color: blue;
-    margin-top: 20px;
-    font-size: 26px;
+    margin-top: 2%;
+    font-size: 2em;
 }
 
 p {
     color: black; 
 }
 
-.sidebarB {
-    width: 600px;
+main {
+    width: 50%;
     float: left;
-    font-size: 16px;
+    font-size: 1em;
 }
 
-.sidebarA {
-    width: 600px;
+.sidebarB {
+    width: 40%;
     float: right;
-    font-size: 16px;
+    font-size: 1em;
+    margin-left: 5%;
 }
 
-table {
-    width: auto;
-    margin: 20px; 
+table.output {
+    width: 75%;
+    margin: 2%; 
+}
+
+table.input {
+    width: 95%;
+    margin: 2%; 
 }
 
 
@@ -44,7 +51,13 @@ th {
 
 /* avoid an extra margin in the links */
 a {
-    margin: 0px;
+    margin: 0%;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
 }
 
 /* Alert bpx */
@@ -53,28 +66,52 @@ a {
     background-color: lightpink;
     border: 2px solid red;
     font-weight: bold;
-    border-radius: 10px 10px 10px 10px;
+    border-radius: 1% 1% 1% 1%;
     text-align: center;
-    width: 500px;
-    padding: 10px;
-    margin: 5px; 
+    width: 90%;
+    padding: 2%;
+    margin: 2%; 
 }
 
 /* Code snippet box */
 .code {
     color: black;
     background-color: white;
-    border: 2px solid black;
-    padding: 5px;
-    margin: 5px; 
+    border: 1px solid black;
+    width: 90%;
+    padding: 2%;
+    margin: 2%; 
     font-style: italic;
-    font-size: 14px;
+    font-size: 1.1em;
 }
 
 
 p.instructions {
     color: black;
     font-weight: bold;
-    margin: 5px; 
-    margin-top: 20px;
+    margin: 2%; 
+    margin-top: 2%;
 }
+
+/* NAV BAR Layout */
+#nav_menu { }
+#nav_menu ul { margin: 0%; list-style-type:none ;}
+#nav_menu ul li { float:left ;}
+#nav_menu ul li a { 
+    text-align: left;
+    font-size: 1.5em;
+   /* padding: 1em 2em 1em 2em;*/
+    margin: 0%;
+    text-decoration: none;
+    color:black;
+}
+
+#nav_menu ul li a.current { 
+    font-weight: bold;
+    text-decoration: underline ;
+}
+
+
+
+
+
