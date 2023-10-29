@@ -1,4 +1,4 @@
-/*! mainCSS fro submarine web | MIT License  */
+/*! mainCSS for submarine web | MIT License  */
 
 /*-------------------------------*/
 /* Layout of the main components */
@@ -131,11 +131,6 @@ p.instructions {
     color: grey;
     background-color: powderblue;
 }
-
-html.my-true-hover button:hover {
-    background-color: blue;
-}
-
 
 /*-------------------------------*/
 /* NAV BAR (MENU) Layout         */
