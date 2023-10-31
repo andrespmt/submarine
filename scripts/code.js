@@ -17,6 +17,7 @@ function start() {
   convert_to_liters("tank_volume","tank_volume_l");
   convert_to_liters("system_pneumatic_volume","system_pneumatic_volume_l");
   convert_to_liters("actuators_air_loss","actuators_air_loss_l");
+  convert_to_atm("actuators_max_pressure","actuators_max_pressure_atm");
   convert_to_atm("tank_max_pressure","tank_max_pressure_atm");
   convert_to_atm("tank_min_pressure","tank_min_pressure_atm");
   convert_to_K("temperature_range_c","temperature_input_k");
@@ -42,13 +43,16 @@ function set_defaults() {
   document.getElementById("tank_min_pressure").value = 60 ;
   document.getElementById("system_pneumatic_volume").value = 2 ;
   document.getElementById("actuators_air_loss").value = 1 ;
+  document.getElementById("actuators_max_pressure").value = 250 ;
 
   // convert to working units
   convert_to_liters("tank_volume","tank_volume_l");
   convert_to_liters("system_pneumatic_volume","system_pneumatic_volume_l");
   convert_to_liters("actuators_air_loss","actuators_air_loss_l");
+  convert_to_atm("actuators_max_pressure","actuators_max_pressure_atm");
   convert_to_atm("tank_max_pressure","tank_max_pressure_atm");
   convert_to_atm("tank_min_pressure","tank_min_pressure_atm");
+  
 
   // Disable the operations controrls since system has changed
   controls_disabled(true);
@@ -74,7 +78,7 @@ function calculate_system_initial_status() {
   // second : calculate the pressure in the system once the tank is connected to the cables. Volume changes.
   pneumatic_volume = parseFloat(document.getElementById("system_pneumatic_volume_l").value);
   system_pressure = moles_tank * R * temp / (volume_tank + pneumatic_volume);
-  actuator_air_loss_moles =  parseFloat(document.getElementById("actuators_air_loss_l").value) * 250.0 / ( R * temp);
+  actuator_air_loss_moles =  parseFloat(document.getElementById("actuators_air_loss_l").value) * parseFloat(document.getElementById("actuators_max_pressure_atm").value) / ( R * temp);   // 250 PSI = 17.01 atm
   movements = moles_tank / actuator_air_loss_moles; 
 
 
@@ -106,7 +110,10 @@ function calculate_live(mov) {
   system_volume = parseFloat(document.getElementById("system_pneumatic_volume_l").value);
   min_pressure_atm = parseFloat(document.getElementById("tank_min_pressure_atm").value);
 
-  actuator_air_loss_moles =  parseFloat(document.getElementById("actuators_air_loss_l").value) * 250.0 / ( R * temp);
+  R = 0.08206;
+  temp = parseFloat(document.getElementById("temperature_input_k").value);
+
+  actuator_air_loss_moles =  parseFloat(document.getElementById("actuators_air_loss_l").value) *  parseFloat(document.getElementById("actuators_max_pressure_atm").value) / ( R * temp);
   claw_count = parseInt(document.getElementById("claw_count").value);
   arm_count = parseInt(document.getElementById("arm_count").value);
   torpedo_count = parseInt(document.getElementById("torpedo_count").value);
@@ -120,16 +127,16 @@ function calculate_live(mov) {
     controls_disabled(true);
   }
 
-  remaining_movements = remaining_air / actuator_air_loss_moles  ;
+  remaining_movements = remaining_air / actuator_air_loss_moles  ;  // => use pressure 
+
   if (remaining_movements < 1) {
     document.getElementById("remaining_mov").style.color="red";
     controls_disabled(true);
   }
 
-  R = 0.08206;
-  temp = parseFloat(document.getElementById("temperature_input_k").value);
+  
   remaining_pressure =  (remaining_air * R * temp ) / (tank_volume + system_volume ) ; 
-  if (remaining_pressure < min_pressure_atm ) {
+  if (remaining_pressure < min_pressure_atm ||  remaining_pressure < parseFloat(document.getElementById("actuators_max_pressure_atm").value)  ) {
     document.getElementById("remaining_pressure_atm").style.color="red";
     controls_disabled(true);
   }

@@ -7,6 +7,7 @@
     <meta name="description" content="submarine controls">
     <meta name="keywords" content="UCLA, submarine">
     <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/mainCSS.css">
     <script type = "text/javascript" src="scripts/code.js"></script>
   </head>
@@ -69,6 +70,14 @@
             <td>==></td>
             <td><output type="text" id="actuators_air_loss_l" >--</output></td>
             <td>liters</td>
+          </tr>
+          <tr>
+            <td>Actuators max pre</th>
+            <td><input type="number" id="actuators_max_pressure" value="250" onclick="convert_to_atm('actuators_max_pressure','actuators_max_pressure_atm')"></td>
+            <td>PSI</td>
+            <td>==></td>
+            <td><output type="text" id="actuators_max_pressure_atm" >--</output></td>
+            <td>atm</td>
           </tr>
           <tr>
             <td></td>
