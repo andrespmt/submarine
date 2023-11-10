@@ -15,11 +15,14 @@ function start() {
 
   // Make sure that all paremeters are converted 
   convert_to_liters("tank_volume","tank_volume_l");
-  convert_to_liters("system_pneumatic_volume","system_pneumatic_volume_l");
-  convert_to_liters("actuators_air_loss","actuators_air_loss_l");
-  convert_to_atm("actuators_max_pressure","actuators_max_pressure_atm");
   convert_to_atm("tank_max_pressure","tank_max_pressure_atm");
   convert_to_atm("tank_min_pressure","tank_min_pressure_atm");
+  convert_to_atm("regulator_pressure","regulator_pressure_atm");
+  convert_tube_to_liters("tube_diameter","tube_L1_length","tube_L1_volume_l");
+  convert_tube_to_liters("tube_diameter","tube_L2_length","tube_L2_volume_l");
+  convert_tube_to_liters("tube_diameter","tube_L3_length","tube_L3_volume_l");
+  convert_to_liters("actuator_volume","actuator_volume_l");
+  convert_to_atm("actuator_max_pressure","actuator_max_pressure_atm");
   convert_to_K("temperature_range_c","temperature_input_k");
 
   // set initial colors
@@ -31,7 +34,7 @@ function start() {
   controls_disabled(false);
 
   // Run the maths
-  calculate_system_initial_status();
+  calculate_system_initial_status_model_A();
 }
 
 
@@ -41,18 +44,25 @@ function set_defaults() {
   document.getElementById("tank_volume").value = 36 ;
   document.getElementById("tank_max_pressure").value = 3000 ;
   document.getElementById("tank_min_pressure").value = 60 ;
-  document.getElementById("system_pneumatic_volume").value = 2 ;
-  document.getElementById("actuators_air_loss").value = 1 ;
-  document.getElementById("actuators_max_pressure").value = 250 ;
+  document.getElementById("regulator_pressure").value = 100 ;
+  document.getElementById("tube_diameter").value = 1 ;
+  document.getElementById("tube_L1_length").value = 10 ;
+  document.getElementById("tube_L2_length").value = 15 ;
+  document.getElementById("tube_L3_length").value = 15 ;
+  document.getElementById("actuator_volume").value = 5 ;
+  document.getElementById("actuator_max_pressure").value = 250 ;
 
   // convert to working units
+  // Make sure that all paremeters are converted 
   convert_to_liters("tank_volume","tank_volume_l");
-  convert_to_liters("system_pneumatic_volume","system_pneumatic_volume_l");
-  convert_to_liters("actuators_air_loss","actuators_air_loss_l");
-  convert_to_atm("actuators_max_pressure","actuators_max_pressure_atm");
   convert_to_atm("tank_max_pressure","tank_max_pressure_atm");
   convert_to_atm("tank_min_pressure","tank_min_pressure_atm");
-  
+  convert_to_atm("regulator_pressure","regulator_pressure_atm");
+  convert_tube_to_liters("tube_diameter","tube_L1_length","tube_L1_volume_l");
+  convert_tube_to_liters("tube_diameter","tube_L2_length","tube_L2_volume_l");
+  convert_tube_to_liters("tube_diameter","tube_L3_length","tube_L3_volume_l");
+  convert_to_liters("actuator_volume","actuator_volume_l");
+  convert_to_atm("actuator_max_pressure","actuator_max_pressure_atm");
 
   // Disable the operations controrls since system has changed
   controls_disabled(true);
@@ -60,8 +70,11 @@ function set_defaults() {
 
 
 // This function calculates the moles in the system
+// Model A : No regulator, actuator sets MAX PRE to 250. 
+//           This mean that each "actuator usage" uses a fix number of moles
+//           The system will work until mols are gone or pressure is less than TANK_MIN_PRE or ACTUATOR_MAX_PRE
 // formula =>  n = PV / RT
-function calculate_system_initial_status() {
+function calculate_system_initial_status_model_A() {
 
   // first: calculate the total number of moles in the tank
   pressure_tank = parseFloat(document.getElementById("tank_max_pressure_atm").value);
@@ -74,23 +87,26 @@ function calculate_system_initial_status() {
   document.getElementById("initial_tank_pressure_atm").value = pressure_tank.toFixed(4);
   document.getElementById("initial_tank_temperature_k").value = temp.toFixed(4);
   document.getElementById("initial_tank_air_mol").value = moles_tank.toFixed(4);
-
-  // second : calculate the pressure in the system once the tank is connected to the cables. Volume changes.
-  pneumatic_volume = parseFloat(document.getElementById("system_pneumatic_volume_l").value);
-  system_pressure = moles_tank * R * temp / (volume_tank + pneumatic_volume);
-  actuator_air_loss_moles =  parseFloat(document.getElementById("actuators_air_loss_l").value) * parseFloat(document.getElementById("actuators_max_pressure_atm").value) / ( R * temp);   // 250 PSI = 17.01 atm
+  
+  // second : calculate the pressure in the system once the tank is connected to L1 Tube. Volume changes.
+  L1_volume = parseFloat(document.getElementById("tube_L1_volume_l").value); 
+  L1_pressure = pressure_tank * volume_tank  / (volume_tank + L1_volume);   // Ps.Vs = nt . RT   =>  Ps.Vs = ( Pt.Vt / RT ) * RT  =>  Ps = Pt.Vt / Vs 
+  
+  // Esto es donde tenemos que aclarar una cosa. Si consideramos que el sistema aguanta la presion inicial del tanque, los numero de moles del actuador cambian .... y las dos formulas siguientes no vales
+  // Si consideramos que el actuador tiene una PRESION max y fija , entonces la formula siguente vale... pero tendremos algo raro , diferencia de presion en dos lados... tiene regulador? 
+  actuator_air_loss_moles =  parseFloat(document.getElementById("actuator_volume_l").value) * parseFloat(document.getElementById("actuator_max_pressure_atm").value) / ( R * temp);   
   movements = moles_tank / actuator_air_loss_moles; 
 
-
-  document.getElementById("initial_system_volume_l").value = (volume_tank + pneumatic_volume).toFixed(4);
-  document.getElementById("initial_system_air_mol").value = moles_tank.toFixed(4);
+  document.getElementById("actuator_mol_loss").value = actuator_air_loss_moles.toFixed(4);
+  document.getElementById("initial_tank_L1_volume_l").value = (volume_tank + L1_volume).toFixed(4);
+  document.getElementById("initial_tank_L1_air_mol").value = moles_tank.toFixed(4);
   document.getElementById("initial_system_temperature_k").value = temp.toFixed(4);
-  document.getElementById("initial_system_pressure_atm").value = system_pressure.toFixed(4);
+  document.getElementById("initial_tank_L1_pressure_atm").value = L1_pressure.toFixed(4);
   document.getElementById("initial_total_mov").value = Math.floor(movements); 
   
   // write the initials for the remaining table
   document.getElementById("remaining_air_mol").value = moles_tank.toFixed(4);
-  document.getElementById("remaining_pressure_atm").value = system_pressure.toFixed(4);
+  document.getElementById("remaining_pressure_atm").value = L1_pressure.toFixed(4);
   document.getElementById("remaining_mov").value = Math.floor(movements); 
   document.getElementById("total_mov").value =  0;  
 
@@ -101,19 +117,28 @@ function calculate_system_initial_status() {
 
 // This function executes submarine model
 // parameter number of movements done in between calls
-function calculate_live(mov) {
+// Model A : No regulator, actuator sets MAX PRE to 250. 
+//           This mean that each "actuator usage" uses a fix number of moles
+//           The system will work until mols are gone or pressure is less than TANK_MIN_PRE or ACTUATOR_MAX_PRE
+//
+// TODO:
+//        use mov index to use L2 or L3 in pressure MAX
+//        add fucntion to calculate number of movements and limiting factor without having to press buttons... (this is done once, so we can compare is true after)
+function calculate_live_model_A(mov) {
 
   remaining_pressure = parseFloat(document.getElementById("remaining_pressure_atm").value);
   remaining_air = parseFloat(document.getElementById("remaining_air_mol").value);
 
-  tank_volume = parseFloat(document.getElementById("tank_volume_l").value);
-  system_volume = parseFloat(document.getElementById("system_pneumatic_volume_l").value);
+  volume_tank = parseFloat(document.getElementById("tank_volume_l").value);
+  L1_volume = parseFloat(document.getElementById("tube_L1_volume_l").value); 
+  L2_volume = parseFloat(document.getElementById("tube_L2_volume_l").value); 
+  actuator_volume = parseFloat(document.getElementById("actuator_volume_l").value); 
   min_pressure_atm = parseFloat(document.getElementById("tank_min_pressure_atm").value);
 
   R = 0.08206;
   temp = parseFloat(document.getElementById("temperature_input_k").value);
 
-  actuator_air_loss_moles =  parseFloat(document.getElementById("actuators_air_loss_l").value) *  parseFloat(document.getElementById("actuators_max_pressure_atm").value) / ( R * temp);
+  actuator_air_loss_moles =  parseFloat(document.getElementById("actuator_volume_l").value) * parseFloat(document.getElementById("actuator_max_pressure_atm").value) / ( R * temp);   
   claw_count = parseInt(document.getElementById("claw_count").value);
   arm_count = parseInt(document.getElementById("arm_count").value);
   torpedo_count = parseInt(document.getElementById("torpedo_count").value);
@@ -127,7 +152,7 @@ function calculate_live(mov) {
     controls_disabled(true);
   }
 
-  remaining_movements = remaining_air / actuator_air_loss_moles  ;  // => use pressure 
+  remaining_movements = remaining_air / actuator_air_loss_moles  ;  
 
   if (remaining_movements < 1) {
     document.getElementById("remaining_mov").style.color="red";
@@ -135,8 +160,8 @@ function calculate_live(mov) {
   }
 
   
-  remaining_pressure =  (remaining_air * R * temp ) / (tank_volume + system_volume ) ; 
-  if (remaining_pressure < min_pressure_atm ||  remaining_pressure < parseFloat(document.getElementById("actuators_max_pressure_atm").value)  ) {
+  remaining_pressure = (remaining_air * R * temp ) / (volume_tank + L1_volume + L2_volume + actuator_volume ) ; 
+  if (remaining_pressure < min_pressure_atm ||  remaining_pressure < parseFloat(document.getElementById("actuator_max_pressure_atm").value)  ) {
     document.getElementById("remaining_pressure_atm").style.color="red";
     controls_disabled(true);
   }
@@ -159,14 +184,14 @@ function temperature_reset() {
   document.getElementById("temperature_input_c").value = 25;  
   document.getElementById("temperature_range_c").value = 25;  
   convert_to_K("temperature_input_c", "temperature_input_k");
-  calculate_live(0);
+  calculate_live_model_A(0);
 }
 
 // This function updates the Temperature output
 function temperature_change() {
   document.getElementById("temperature_input_c").value = document.getElementById("temperature_range_c").value;  
   convert_to_K("temperature_input_c", "temperature_input_k");
-  calculate_live(0);
+  calculate_live_model_A(0);
 }
 
 // This function resets Depth = 3
@@ -200,7 +225,7 @@ function move_claw() {
   tmp = parseInt(document.getElementById("claw_count").value);
   tmp += 1;
   document.getElementById("claw_count").value = tmp; 
-  calculate_live(1);   // one movement
+  calculate_live_model_A(1);   // one movement
 }
 
 // Action that happens when the arm is moved
@@ -208,7 +233,7 @@ function move_arm() {
   tmp = parseInt(document.getElementById("arm_count").value);
   tmp += 1;
   document.getElementById("arm_count").value = tmp;
-  calculate_live(1);  // one movement
+  calculate_live_model_A(1);  // one movement
 }
 
 // Action that happens when the torpedo is launched
@@ -216,7 +241,7 @@ function launch_torpedo() {
   tmp = parseInt(document.getElementById("torpedo_count").value);
   tmp += 1;
   document.getElementById("torpedo_count").value = tmp; 
-  calculate_live(1); // one movement
+  calculate_live_model_A(1); // one movement
 }
 
 /*-------------------------------------------*/
@@ -251,6 +276,16 @@ function convert_to_K (id,id_out) {
   tmp = parseFloat(document.getElementById(id).value);
   tmp = tmp + 273.15 ;
   document.getElementById(id_out).value = tmp.toFixed(4); 
+}
+
+function convert_tube_to_liters(id_dia, id, id_out) {
+  diameter = parseFloat(document.getElementById(id_dia).value);
+  length = parseFloat(document.getElementById(id).value);
+  volume = 3.14159 * length * ( diameter * diameter ) / 4 ;   
+  volume = volume * 0.016387064; // convert to liters
+  document.getElementById(id_out).value = volume.toFixed(4); 
+  // system changed
+  controls_disabled(true);
 }
 
 // This is an alert for when the maths are wrong

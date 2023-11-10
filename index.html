@@ -22,14 +22,13 @@
     </nav>
     <hr class="fine">
 
-    <!-- This section corresponds to the LEFT side of the screen-->
-    <!-- These are system requirements (INPUTS)                 -->
-    <main class="sidebarA">
-      
-      <h1>System parameters</h1>
-      <p class="instructions">These settings are the system definition, once the submarine is built they will be static. After setting the parameters click "start" to begin</p>
-
-      <p>
+    <div class="row">
+      <!-- This section corresponds to the LEFT side of the screen-->
+      <!-- These are system requirements (INPUTS)                 -->
+      <div class="column_L" >
+        <h1>System parameters</h1>
+        <p class="instructions">These settings are the system definition, once the submarine is built they will be static. After setting the parameters click "start" to begin</p>
+        
         <table  class="input">
           <tr>
             <td>Tank Volume</td>
@@ -55,28 +54,60 @@
             <td><output type="text" id="tank_min_pressure_atm" >--</output></td>
             <td>atm</td>
           </tr>
-          <tr>   
-            <td>Pneumatic volume</th>
-            <td><input type="number" id="system_pneumatic_volume" value="2" onclick="convert_to_liters('system_pneumatic_volume','system_pneumatic_volume_l')"></td>
-            <td>in<sup>3</sup></td>
-            <td>==></td>
-            <td><output type="text" id="system_pneumatic_volume_l" >--</output></td>
-            <td>liters</td>
-          </tr>
           <tr>
-            <td>Actuators air loss</th>
-            <td><input type="number" id="actuators_air_loss" value="1" onclick="convert_to_liters('actuators_air_loss','actuators_air_loss_l')"></td>
-            <td>in<sup>3</sup></td>
-            <td>==></td>
-            <td><output type="text" id="actuators_air_loss_l" >--</output></td>
-            <td>liters</td>
-          </tr>
-          <tr>
-            <td>Actuators max pre</th>
-            <td><input type="number" id="actuators_max_pressure" value="250" onclick="convert_to_atm('actuators_max_pressure','actuators_max_pressure_atm')"></td>
+            <td>Regulator pressure</th>
+            <td><input type="number" id="regulator_pressure" value="100" onchange="convert_to_atm('regulator_pressure','regulator_pressure_atm')"></td>
             <td>PSI</td>
             <td>==></td>
-            <td><output type="text" id="actuators_max_pressure_atm" >--</output></td>
+            <td><output type="text" id="regulator_pressure_atm" >--</output></td>
+            <td>atm</td>
+          </tr>
+          <tr>   
+            <td>Tube diameter</th>
+            <td><input type="number" id="tube_diameter" value="1"></td>
+            <td>in</td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>   
+            <td>Tube L1 length</th>
+            <td><input type="number" id="tube_L1_length" value="10" onclick="convert_tube_to_liters('tube_diameter','tube_L1_length','tube_L1_volume_l')"></td>
+            <td>in</td>
+            <td>==></td>
+            <td><output type="text" id="tube_L1_volume_l" >--</output></td>
+            <td>liters</td>
+          </tr>
+          <tr>   
+            <td>Tube L2 length</th>
+            <td><input type="number" id="tube_L2_length" value="15" onclick="convert_tube_to_liters('tube_diameter','tube_L2_length','tube_L2_volume_l')"></td>
+            <td>in</td>
+            <td>==></td>
+            <td><output type="text" id="tube_L2_volume_l" >--</output></td>
+            <td>liters</td>
+          </tr>
+          <tr>   
+            <td>Tube L3 length</th>
+            <td><input type="number" id="tube_L3_length" value="15" onclick="convert_tube_to_liters('tube_diameter','tube_L3_length','tube_L3_volume_l')"></td>
+            <td>in</td>
+            <td>==></td>
+            <td><output type="text" id="tube_L3_volume_l" >--</output></td>
+            <td>liters</td>
+          </tr>
+          <tr>
+            <td>Actuator volume</th>
+            <td><input type="number" id="actuator_volume" value="5" onclick="convert_to_liters('actuator_volume','actuator_volume_l')"></td>
+            <td>in<sup>3</sup></td>
+            <td>==></td>
+            <td><output type="text" id="actuator_volume_l" >--</output></td>
+            <td>liters</td>
+          </tr>
+          <tr>
+            <td>Actuator max PSI</th>
+            <td><input type="number" id="actuator_max_pressure" value="250" onclick="convert_to_atm('actuator_max_pressure','actuator_max_pressure_atm')"></td>
+            <td>PSI</td>
+            <td>==></td>
+            <td><output type="text" id="actuator_max_pressure_atm" >--</output></td>
             <td>atm</td>
           </tr>
           <tr>
@@ -87,12 +118,11 @@
           </td>
           </tr>
         </table>
-      </p>
+        
+        <!-- Entry parameters that may change during the exercise -->
+        <h1>Variable conditions</h1>
+        <p class="instructions"> These settings are variable and they may change while in operation.</p>
       
-      <!-- Entry parameters that may change during the exercise -->
-      <h1>Variable conditions</h1>
-      <p class="instructions"> These settings are variable and they may change while in operation.</p>
-      <p>
         <table class="input">
           <tr>
             <td>
@@ -117,48 +147,21 @@
               <button id="temperature_reset" onclick="temperature_reset()">Reset</button> 
             </td>
           </tr>
-        <!-- 
-          <tr>
-            <td>
-              Depth
-            </td>
-            <td>          
-              <input type="range" id="depth_input" list="depth_scale" min="0" max="10" value="3" oninput="depth_change()">         
-              <datalist id="depth_scale">
-                <option value="0" label="0"></option>
-                <option value="2" label="2"></option>
-                <option value="4" label="4"></option>
-                <option value="6" label="6"></option>
-                <option value="8" label="8"></option>
-                <option value="10" label="10"></option>
-              </datalist>
-            </td>
-            <td><output id="depth_output" for="depth_input">3</output> m </td>
-            <td colspan="3">(NOT USED)</td>
-            <td>
-              <button id="depth_reset" onclick="depth_reset()">Reset</button>
-            </td>
-          </tr>
-        -->
         </table>
-      </p>
+        
+        <h1>Robot actuators</h1>
+        <p class="instructions"> Press "start" to activate the controls.</p>
+        <p>
+          <button class="b_big" disabled="disabled" id="btn_torpedo"  onclick="launch_torpedo()">Launch torpedo</button>
+          <button class="b_big" disabled="disabled" id="btn_arm"  onclick="move_arm()">Move arm</button>
+          <button class="b_big" disabled="disabled" id="btn_claw"  onclick="move_claw()">Move claw</button>
+        </p>
+      </div>
 
-      <h1>Robot actuators</h1>
-      <p class="instructions"> Press "start" to activate the controls.</p>
-      <p>
-        <button class="b_big" disabled="disabled" id="btn_torpedo"  onclick="launch_torpedo()">Launch torpedo</button>
-        <button class="b_big" disabled="disabled" id="btn_arm"  onclick="move_arm()">Move arm</button>
-        <button class="b_big" disabled="disabled" id="btn_claw"  onclick="move_claw()">Move claw</button>
-      </p>
-      
-    </main>
-
-
-    <!-- This section corresponds to the RIGHT side of the screen-->
-    <!-- These are system requirements (OUTPUTS)                 -->
-    <aside class="sidebarB">
-      <h1>Submarine information</h1>
-      <p>
+      <!-- This section corresponds to 2 column : MODEL A -->
+      <!-- These are system requirements (OUTPUTS)        -->
+      <div class="column_R" style="margin-left: 2%;">
+        <h1>Model A: No regulator<br>PSI actuator</h1>
 
         <!-- Tank initial conditions (tank only) -->
         <table class="output">
@@ -179,39 +182,166 @@
             <td>K</td>
           </tr>
           <tr>
-            <td>Initial compressed air</th>
-            <td><output type="text" id="initial_tank_air_mol" >--</output></td>
-            <td>mol</td>
+            <td><b>Initial compressed air</b></th>
+            <td><b><output type="text" id="initial_tank_air_mol" >--</output></b></td>
+            <td><b>mol</b></td>
           </tr>
         </table>
-        
+          
         <!-- System initial conditions (tank + pneumatic circuit) -->
         <table class="output">
-          <tr><th colspan="3">--- SYSTEM initial conditions  ---</th></tr>    
+          <tr><th colspan="3">--- TANK_L1 initial conditions  ---</th></tr>    
           <tr>
-            <td>System volume</th>
-            <td><output type="text" id="initial_system_volume_l" >--</output></td>
+            <td>Tank_L1 volume</th>
+            <td><output type="text" id="initial_tank_L1_volume_l" >--</output></td>
             <td>liters</td>
           </tr>
-          <tr>
-            <td>Initial compressed air</th>
-            <td><output type="text" id="initial_system_air_mol" >--</output></td>
-            <td>mol</td>
+          <tr>   
+            <td><b>Tank_L1 pressure</b></td>
+            <td><b><output type="text" id="initial_tank_L1_pressure_atm">--</output></b></td>
+            <td><b>atm</b></td>
           </tr>
           <tr>   
             <td>Initial temperature</td>
             <td><output type="text" id="initial_system_temperature_k">--</output></td>
             <td>K</td>
           </tr>
-          <tr>   
-            <td>System pressure</td>
-            <td><output type="text" id="initial_system_pressure_atm">--</output></td>
-            <td>atm</td>
+          <tr>
+            <td>Initial compressed air</th>
+            <td><output type="text" id="initial_tank_L1_air_mol" >--</output></td>
+            <td>mol</td>
           </tr>
           <tr>
             <td>Initial movements</td>
             <td><output type="text" id="initial_total_mov" >--</output></td>
             <td></td>
+          </tr>
+        </table>
+
+        <!-- Tank initial conditions (tank only) -->
+        <table class="output">
+          <tr><th colspan="3">--- Actuator mol loss ---</th></tr>    
+          <tr>
+            <td><b>Actuator mol loss</b></th>
+            <td><b><output type="text" id="actuator_mol_loss" >--</output></b></td>
+            <td><b>mol</b></td>
+          </tr>
+        </table>
+          
+        <!-- Remaining information -->
+        <table class="output">
+          <tr><th colspan="3">--- REMAINING ---</th></tr>
+          <tr>
+            <td>Remaining compressed air</th>
+            <td><output type="text" id="remaining_air_mol" >--</output></td>
+            <td>mol</td>
+          </tr>
+          <tr>   
+            <td>Remaining pressure</td>
+            <td><output type="text" id="remaining_pressure_atm">--</output></td>
+            <td>atm</td>
+          </tr>
+          <tr>
+            <td>Remaining movements</td>
+            <td><output type="text" id="remaining_mov" >--</output></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Total movements done</td>
+            <td><output type="text" id="total_mov" >--</output></td>
+            <td></td>
+          </tr>
+        </table>
+        
+        <!-- Movement ststs -->
+        <table class="output">
+          <tr><th colspan="3">--- STATS ---</th></tr>
+          <tr>
+            <td>Torpedo launches</td>
+            <td><output type="text" id="torpedo_count"> 0 </output></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Arm movements</td>
+            <td><output type="text" id="arm_count"> 0 </output></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Claw moves</td>
+            <td><output type="text" id="claw_count"> 0 </output></td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- This section corresponds to 3 column : MODEL B -->
+      <!-- These are system requirements (OUTPUTS)        -->
+      <div class="column_R">
+    
+        <h1>Model B: No regulator<br>PSI TANK</h1>
+
+        <!-- Tank initial conditions (tank only) -->
+        <table class="output">
+          <tr><th colspan="3">--- TANK initial conditions ---</th></tr>    
+          <tr>
+            <td>Tank volume</th>
+            <td><output type="text" id="initial_tank_volume_l" >--</output></td>
+            <td>liters</td>
+          </tr>
+          <tr>   
+            <td>Initial pressure</td>
+            <td><output type="text" id="initial_tank_pressure_atm">--</output></td>
+            <td>atm</td>
+          </tr>
+          <tr>   
+            <td>Initial temperature</td>
+            <td><output type="text" id="initial_tank_temperature_k">--</output></td>
+            <td>K</td>
+          </tr>
+          <tr>
+            <td><b>Initial compressed air</b></th>
+            <td><b><output type="text" id="initial_tank_air_mol" >--</output></b></td>
+            <td><b>mol</b></td>
+          </tr>
+        </table>
+        
+        <!-- System initial conditions (tank + pneumatic circuit) -->
+        <table class="output">
+          <tr><th colspan="3">--- TANK_L1 initial conditions  ---</th></tr>    
+          <tr>
+            <td>Tank_L1 volume</th>
+            <td><output type="text" id="initial_tank_L1_volume_l" >--</output></td>
+            <td>liters</td>
+          </tr>
+          <tr>   
+            <td><b>Tank_L1 pressure</b></td>
+            <td><b><output type="text" id="initial_tank_L1_pressure_atm">--</output></b></td>
+            <td><b>atm</b></td>
+          </tr>
+          <tr>   
+            <td>Initial temperature</td>
+            <td><output type="text" id="initial_system_temperature_k">--</output></td>
+            <td>K</td>
+          </tr>
+          <tr>
+            <td>Initial compressed air</th>
+            <td><output type="text" id="initial_tank_L1_air_mol" >--</output></td>
+            <td>mol</td>
+          </tr>
+          <tr>
+            <td>Initial movements</td>
+            <td><output type="text" id="initial_total_mov" >--</output></td>
+            <td></td>
+          </tr>
+        </table>
+
+        <!-- Tank initial conditions (tank only) -->
+        <table class="output">
+          <tr><th colspan="3">--- Actuator mol loss ---</th></tr>    
+          <tr>
+            <td><b>Actuator mol loss</b></th>
+            <td><b><output type="text" id="actuator_mol_loss" >--</output></b></td>
+            <td><b>mol</b></td>
           </tr>
         </table>
         
@@ -258,9 +388,125 @@
             <td><output type="text" id="claw_count"> 0 </output></td>
             <td></td>
           </tr>
-        </table>
-      </p>
-    </aside>
+        </table>  
+      </div>
 
+      <!-- This section corresponds to 4 column : MODEL C -->
+      <!-- These are system requirements (OUTPUTS)        -->
+      <div class="column_R">
+        <h1>Model C: Regulator<BR>PSI regulator</h1>
+
+        <!-- Tank initial conditions (tank only) -->
+        <table class="output">
+          <tr><th colspan="3">--- TANK initial conditions ---</th></tr>    
+          <tr>
+            <td>Tank volume</th>
+            <td><output type="text" id="initial_tank_volume_l" >--</output></td>
+            <td>liters</td>
+          </tr>
+          <tr>   
+            <td>Initial pressure</td>
+            <td><output type="text" id="initial_tank_pressure_atm">--</output></td>
+            <td>atm</td>
+          </tr>
+          <tr>   
+            <td>Initial temperature</td>
+            <td><output type="text" id="initial_tank_temperature_k">--</output></td>
+            <td>K</td>
+          </tr>
+          <tr>
+            <td><b>Initial compressed air</b></th>
+            <td><b><output type="text" id="initial_tank_air_mol" >--</output></b></td>
+            <td><b>mol</b></td>
+          </tr>
+        </table>
+        
+        <!-- System initial conditions (tank + pneumatic circuit) -->
+        <table class="output">
+          <tr><th colspan="3">--- TANK_L1 initial conditions  ---</th></tr>    
+          <tr>
+            <td>Tank_L1 volume</th>
+            <td><output type="text" id="initial_tank_L1_volume_l" >--</output></td>
+            <td>liters</td>
+          </tr>
+          <tr>   
+            <td><b>Tank_L1 pressure</b></td>
+            <td><b><output type="text" id="initial_tank_L1_pressure_atm">--</output></b></td>
+            <td><b>atm</b></td>
+          </tr>
+          <tr>   
+            <td>Initial temperature</td>
+            <td><output type="text" id="initial_system_temperature_k">--</output></td>
+            <td>K</td>
+          </tr>
+          <tr>
+            <td>Initial compressed air</th>
+            <td><output type="text" id="initial_tank_L1_air_mol" >--</output></td>
+            <td>mol</td>
+          </tr>
+          <tr>
+            <td>Initial movements</td>
+            <td><output type="text" id="initial_total_mov" >--</output></td>
+            <td></td>
+          </tr>
+        </table>
+
+        <!-- Tank initial conditions (tank only) -->
+        <table class="output">
+          <tr><th colspan="3">--- Actuator mol loss ---</th></tr>    
+          <tr>
+            <td><b>Actuator mol loss</b></th>
+            <td><b><output type="text" id="actuator_mol_loss" >--</output></b></td>
+            <td><b>mol</b></td>
+          </tr>
+        </table>
+        
+        <!-- Remaining information -->
+        <table class="output">
+          <tr><th colspan="3">--- REMAINING ---</th></tr>
+          <tr>
+            <td>Remaining compressed air</th>
+            <td><output type="text" id="remaining_air_mol" >--</output></td>
+            <td>mol</td>
+          </tr>
+          <tr>   
+            <td>Remaining pressure</td>
+            <td><output type="text" id="remaining_pressure_atm">--</output></td>
+            <td>atm</td>
+          </tr>
+          <tr>
+            <td>Remaining movements</td>
+            <td><output type="text" id="remaining_mov" >--</output></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Total movements done</td>
+            <td><output type="text" id="total_mov" >--</output></td>
+            <td></td>
+          </tr>
+        </table>
+        
+        <!-- Movement ststs -->
+        <table class="output">
+          <tr><th colspan="3">--- STATS ---</th></tr>
+          <tr>
+            <td>Torpedo launches</td>
+            <td><output type="text" id="torpedo_count"> 0 </output></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Arm movements</td>
+            <td><output type="text" id="arm_count"> 0 </output></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Claw moves</td>
+            <td><output type="text" id="claw_count"> 0 </output></td>
+            <td></td>
+          </tr>
+        </table>   
+      </div>
+
+    </div>
   </body>
 </html> 

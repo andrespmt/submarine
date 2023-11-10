@@ -11,7 +11,7 @@
 
 body {
     background-color: powderblue;
-    max-width: 1000px;
+    max-width: 1920px;
     min-width: 800px;
     width: 100%;
 }
@@ -26,17 +26,15 @@ p {
     color: black; 
 }
 
-main {
-    width: 50%;
+/* Create three equal columns that floats next to each other */
+.column_L {
     float: left;
-    font-size: 1em;
+    width: 30%;
 }
 
-.sidebarB {
-    width: 40%;
-    float: right;
-    font-size: 1em;
-    margin-left: 5%;
+.column_R {
+    float: left;
+    width: 22%;
 }
 
 .clearfix::after {
@@ -49,7 +47,7 @@ main {
 /* CSS for HTML components */
 /*-------------------------*/
 table.output {
-    width: 75%;
+    width: 65%;
     margin: 2%; 
     font-size: 0.9em;
 }
